@@ -41,6 +41,7 @@ const dbConnect = async () => {
 dbConnect()
 
 const userData = client.db("task").collection("user");
+const userDataBase = client.db("task").collection("userData");
 
 app.get('/', (req, res) => {
     res.send('check')
@@ -66,6 +67,20 @@ app.put('/user' , async (req, res) => {
         }
     }
     const result = await userData.updateOne(filter, update , options);
+    res.send(result);
+})
+
+//  task data
+app.get('/userData', async (req, res) => {
+    const body = req.query;
+    const query = {email: body?.email}
+    const result = await userDataBase.find(query).toArray();
+    res.send(result);
+})
+
+app.post('/userData', async (req, res) => {
+    const body = req.body;
+    const result = await userDataBase.insertOne(body);
     res.send(result);
 })
 
