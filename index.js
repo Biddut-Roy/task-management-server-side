@@ -2,21 +2,20 @@ const express = require('express');
 require('dotenv').config();
 const app = express()
 const cors = require('cors')
-const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser')
-const port = process.env.PORT || 3000 ;
+const port = process.env.PORT || 5000 ;
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 //middleware
 app.use(cors({
-    origin:[
+    origin: [
         'http://localhost:5173',
         'http://localhost:5174'
     ],
     credentials: true,
-}))
+}));
 
-app.use(express.json)
+app.use(express.json())
 app.use(cookieParser())
 
 
@@ -41,10 +40,35 @@ const dbConnect = async () => {
 }
 dbConnect()
 
+const userData = client.db("task").collection("user");
 
 app.get('/', (req, res) => {
-    res.send('check my server')
+    res.send('check')
+
 })
+
+
+// user
+app.post('/user', async (req, res) => {
+    const body = req.body;
+    const result = await userData.insertOne(body);
+    res.send(result);
+})
+
+app.put('/user' , async (req, res) => {
+    const body = req.body;
+    const filter = { email: body?.email };
+    const options = { upsert: true };
+    const update = {
+        $set: {
+            email: body?.email,
+            name: body?.name
+        }
+    }
+    const result = await userData.updateOne(filter, update , options);
+    res.send(result);
+})
+
 
 
 app.listen(port, () => {
