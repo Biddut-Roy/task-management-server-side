@@ -83,6 +83,18 @@ app.post('/userData', async (req, res) => {
     const result = await userDataBase.insertOne(body);
     res.send(result);
 })
+app.patch('/userDataSC', async (req, res) => {
+    const body = req.body.data;
+    console.log(body);
+    const filter = { mainid: body?.mainid};
+    const update = {
+        $set: {
+            status: body?.status
+        }
+    }
+    // const result = await userDataBase.updateOne(filter, update);
+    // res.send(result);
+})
 
 
 
