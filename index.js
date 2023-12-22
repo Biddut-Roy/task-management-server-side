@@ -110,6 +110,13 @@ app.patch('/userDataEC', async (req, res) => {
     res.send(result);
 })
 
+app.delete('/userData/:id', async (req, res) => {
+    const mainid = req.params.id;
+    const query = {mainid: mainid}
+    const result = await userDataBase.deleteOne(query);
+    res.send(result);
+})
+
 
 
 app.listen(port, () => {
