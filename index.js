@@ -84,16 +84,30 @@ app.post('/userData', async (req, res) => {
     res.send(result);
 })
 app.patch('/userDataSC', async (req, res) => {
-    const body = req.body.data;
-    console.log(body);
+    const body = req.body
     const filter = { mainid: body?.mainid};
     const update = {
         $set: {
             status: body?.status
         }
     }
-    // const result = await userDataBase.updateOne(filter, update);
-    // res.send(result);
+    const result = await userDataBase.updateOne(filter, update);
+    res.send(result);
+})
+app.patch('/userDataEC', async (req, res) => {
+    const body = req.body
+
+    const filter = { mainid: body?.mainid};
+    const update = {
+        $set: {
+            status: body?.status,
+            Title: body?.Title,
+            Descriptions: body?.Descriptions,
+            Priority: body?.Priority
+        }
+    }
+    const result = await userDataBase.updateOne(filter, update);
+    res.send(result);
 })
 
 
